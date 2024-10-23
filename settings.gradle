@@ -1,6 +1,37 @@
+pluginManagement {
+	repositories {
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+		gradlePluginPortal()
+	}
+}
+
+gradle.allprojects {
+	buildscript {
+		repositories {
+			mavenLocal()
+
+			maven {
+				url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+			}
+		}
+	}
+
+	repositories {
+		mavenLocal()
+
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+	}
+
+}
+
 buildscript {
 	dependencies {
 		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "10.1.7"
+		classpath group: "net.saliman", name: "gradle-properties-plugin", version: "1.4.6"
 	}
 
 	repositories {
@@ -12,4 +43,5 @@ buildscript {
 	}
 }
 
+apply plugin: "net.saliman.properties"
 apply plugin: "com.liferay.workspace"

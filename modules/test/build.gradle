@@ -1,0 +1,23 @@
+configure(subprojects.findAll { !it.subprojects }) {
+    beforeEvaluate { subproject ->
+        deploy {
+            enabled = false
+        }
+    }
+
+    afterEvaluate { subproject ->
+
+        compileJava {
+            options.encoding = "UTF-8"
+        }
+
+        dependencies {
+            testImplementation group: "junit", name: "junit", version: "default"
+            testImplementation group: 'org.hamcrest', name: 'java-hamcrest', version: "default"
+        }
+
+        deploy {
+            exclude "**/*source.formatter*.jar"
+        }
+    }
+}

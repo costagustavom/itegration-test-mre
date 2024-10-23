@@ -1,0 +1,3 @@
+Bundle-Name: Integration Tests MRE
+Bundle-SymbolicName: com.liferay.integration.tests.mre
+Bundle-Version: 1.0.0

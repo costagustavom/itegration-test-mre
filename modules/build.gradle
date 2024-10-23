@@ -1,0 +1,59 @@
+task removeDefaultTestBundles(type: Delete) {
+    delete fileTree("${gradle.liferayWorkspace.homeDir}/osgi/test") {
+        include '*.jar'
+    }
+}
+configure(subprojects.findAll { !it.subprojects }) {
+    afterEvaluate { project ->
+
+        compileJava {
+            options.encoding = "UTF-8"
+        }
+
+        project.plugins.withId('com.liferay.test.integration') {
+            configurations {
+                testModules
+            }
+
+            dependencies {
+                testImplementation group: "org.slf4j", name: "slf4j-api", version: findProperty("slf4j-api.version")
+                testImplementation group: "javax.servlet", name: "javax.servlet-api", version: findProperty("javax.servlet-api.version")
+                testImplementation group: 'log4j', name: 'log4j', version: findProperty("log4j.version")
+
+                testIntegrationImplementation group: "com.liferay.portal", name: "com.liferay.portal.test"
+                testIntegrationImplementation group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "default"
+                testIntegrationImplementation group: "org.osgi", name: "org.osgi.core", version: "default"
+                testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.concurrent"
+                testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.memory"
+                testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.string"
+                testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.lang"
+
+                testModules group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge.connector"
+                testModules group: "com.liferay.portal", name: "com.liferay.portal.test"
+                testModules group: "org.apache.commons", name: "commons-compress", version: findProperty("commons-compress.version")
+                testModules group: "org.apache.aries.jmx", name: "org.apache.aries.jmx.core", version: findProperty("org.apache.aries.jmx.core.version")
+            }
+
+            copyTestModules.dependsOn removeDefaultTestBundles
+
+            setUpTestableTomcat {
+                dir = "${rootProject.rootDir}/bundles/tomcat"
+            }
+
+            startTestableTomcat {
+                binDir = "${rootProject.rootDir}/bundles/tomcat/bin"
+            }
+
+            stopTestableTomcat {
+                binDir = "${rootProject.rootDir}/bundles/tomcat/bin"
+            }
+
+            startTestableTomcat.dependsOn rootProject.deployTestableModules
+            startTestableTomcat.checkTimeout 1200000
+
+            testIntegration {
+                testClassesDirs = sourceSets.testIntegration.output.classesDirs
+            }
+        }
+    }
+}

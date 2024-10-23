@@ -1,0 +1,14 @@
+dependencies {
+    testIntegrationImplementation group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge"
+    testIntegrationImplementation group: "com.liferay.portal", name: "com.liferay.portal.test"
+    testIntegrationImplementation group: "com.liferay.portal", name: "com.liferay.portal.kernel"
+    testIntegrationImplementation group: "org.hamcrest", name: "hamcrest", version: "default"
+    testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.string"
+    testIntegrationImplementation group: "com.liferay", name: "com.liferay.petra.io"
+    
+    testIntegrationImplementation group: "org.springframework", name: "spring-core", version: "default"
+    testIntegrationImplementation group: "commons-io", name: "commons-io", version: "default"
+    testIntegrationImplementation group: "org.apache.logging.log4j", name: "log4j-core", version: "default"
+}
+
+testIntegration.enabled = true

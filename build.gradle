@@ -1,1 +1,20 @@
-// Check GETTING_STARTED.markdown for information regarding usage.
+distBundle {
+    exclude (["**/source-formatter*.jar","**/*.test*.jar", "**/*.mock*.jar"] as Set)
+}
+
+allprojects {
+
+    repositories {
+        mavenLocal()
+        flatDir { dirs "${rootProject.projectDir}/boms" }
+        maven{
+            url "https://repo1.maven.org/maven2/"
+        }
+    }
+}
+
+task deployTestableModules {
+    dependsOn {
+        getTasksByName('deploy', true)
+    }
+}
